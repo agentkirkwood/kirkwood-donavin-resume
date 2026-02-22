@@ -527,6 +527,15 @@
 \def\@tagline{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% bref: Custom hyperlink command with styled formatting
+%
+% Usage: \bref{url}{link text}
+% Creates an underlined hyperlink with black text color.
+% Uses \smash to prevent affecting line spacing.
+%
+\newcommand{\bref}[2]{\href{#1}{\color{black}\underline{\smash{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % use this to define your address, this may be called more than once.
 %
 \let\@addressone\relax
