@@ -197,12 +197,10 @@
 %\DeclareOption{11pt}{\renewcommand\@ptsize{1}}
 %\DeclareOption{12pt}{\renewcommand\@ptsize{2}}
 
-\PassOptionsToClass{11pt,12pt}{article}
-\LoadClassWithOptions{article}
-\RequirePackage{calc} %For line width calculation
-
-\newif\if@line
-\newif\if@margin
+% Paper size options
+\def\PaperOption{letterpaper}
+\DeclareOption{letter}{\def\PaperOption{letterpaper}}
+\DeclareOption{a4}{\def\PaperOption{a4paper}}
 
 \DeclareOption{line}{\@linetrue}
 \DeclareOption{centered}{\@linefalse}
@@ -210,8 +208,15 @@
 \DeclareOption{resmargin}{\@margintrue}
 \DeclareOption{overlapped}{\@marginfalse}
 
-\ExecuteOptions{overlapped,centered}
+\newif\if@line
+\newif\if@margin
+
+\ExecuteOptions{overlapped,centered,letter}
 \ProcessOptions\relax
+
+\PassOptionsToClass{\PaperOption,11pt,12pt}{article}
+\LoadClassWithOptions{article}
+\RequirePackage{calc} %For line width calculation
 
 \nofiles	     % resume's don't need .aux files
 
@@ -305,7 +310,12 @@
 \newskip\sectionskip
 \newdimen\resumewidth
 
-\resumewidth=6.5in
+% Use current textwidth from geometry package instead of hardcoded value
+% This will be set by the document after geometry package is loaded
+\AtBeginDocument{%
+  \resumewidth=\textwidth
+  \setlength{\linelength}{\textwidth+3cm}%
+}
 \sectionskip=3.5ex plus 1ex minus -.2ex % values stolen from LaTeX
 
 \def\newsectionwidth#1{%
@@ -313,7 +323,7 @@
 		     \textwidth=\resumewidth
 		     \advance\textwidth-\sectionwidth
 		     \hsize=\textwidth
-		     \hoffset=\sectionwidth
+		     % Section indentation via leftskip is applied in resume environment
 }
 
 
@@ -372,21 +382,8 @@
   % will be ignored but \hoffset's are not.  The result is that the box will
   % only by \hoffset. This is what I want
   \hbox to 0pt{%
-    \hss	 % this is an llap.  In other words, this glue
-		 % will shrink by the width of the stuff in the vbox
-		 % (\sectionwidth) into the left margin and then
-		 % insert the contents of the vbox.
-    \vtop to 0pt{% make a 0pt height paragraph, with the baseline at the
-		 % lined up with the baseline of the first box in the list
-      \leftskip=0pt
-      \hsize=\sectionwidth
-      \textwidth=\sectionwidth
-      \raggedright     % you don't want this filled out to the right margin
-      \sectionfont
-      #1\vss	       % Go into horizontal mode; do the paragraph;
-		       % go into vertical mode; add some negative glue
-		       % to give a box of 0pt height and depth
-    }%
+    \hbox to \sectionwidth{\sectionfont#1\hss}%
+    \hss%
   }%
   \addpenalty{-\@secpenalty} % this would be a bad place for a page break
   \vskip-\baselineskip % when the next box is processed, baselineskip
@@ -487,6 +484,15 @@
 \if@line\ds@line\else\ds@centered\fi
 \if@margin\ds@margin\else\ds@overlapped\fi
 
+% After sectionwidth is set, redefine @listI to account for section indentation
+\def\@listI{\topsep 0pt
+\parskip 0pt
+\partopsep 2pt plus 2pt
+\parsep 2pt plus 2pt
+\itemsep \parsep
+\leftmargin=\sectionwidth
+\advance\leftmargin 0.25em}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % typeset resume all nice and pretty
@@ -498,12 +504,12 @@
 %
 
 %This is a work around
+% linelength is now set in \AtBeginDocument after resumewidth is properly initialized
 \newlength{\linelength}
-\setlength{\linelength}{\resumewidth+3cm}
 
-\def\fullline{		% hrules only listen to \hoffset
-  \nointerlineskip	% so I have this code
-  \moveleft\hoffset\vbox{\hrule width\linelength}
+\def\fullline{
+  \nointerlineskip
+  \vbox{\hrule width\textwidth}
   \nointerlineskip
 }
 
@@ -527,6 +533,17 @@
 \def\@tagline{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Color definitions for social media buttons
+%
+% These colors are used by the button commands below
+%
+\AtBeginDocument{%
+  \definecolor{linkedinblue}{RGB}{0,119,181}%
+  \definecolor{stravaorange}{RGB}{255,87,34}%
+  \definecolor{githubblack}{RGB}{51,51,51}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % bref: Custom hyperlink command with styled formatting
 %
 % Usage: \bref{url}{link text}
@@ -534,6 +551,51 @@
 % Uses \smash to prevent affecting line spacing.
 %
 \newcommand{\bref}[2]{\href{#1}{\color{black}\underline{\smash{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% linkedinbtn: LinkedIn button with icon
+%
+% Usage: \linkedinbtn{url}
+% Creates a LinkedIn-styled button with the LinkedIn icon.
+% Requires fontawesome5 package imported in the document.
+%
+\newcommand{\linkedinbtn}[1]{%
+  \href{#1}{%
+    \fcolorbox{linkedinblue}{linkedinblue}{%
+      \color{white}\textbf{~\faLinkedin~LinkedIn~}%
+    }%
+  }%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% stravabtn: Strava button with icon
+%
+% Usage: \stravabtn{url}
+% Creates a Strava-styled button with the Strava icon.
+% Requires fontawesome5 package imported in the document.
+%
+\newcommand{\stravabtn}[1]{%
+  \href{#1}{%
+    \fcolorbox{stravaorange}{stravaorange}{%
+      \color{white}\textbf{~\faStrava~Strava~}%
+    }%
+  }%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% githubbtn: GitHub button with icon
+%
+% Usage: \githubbtn{url}
+% Creates a GitHub-styled button with the GitHub icon.
+% Requires fontawesome5 package imported in the document.
+%
+\newcommand{\githubbtn}[1]{%
+  \href{#1}{%
+    \fcolorbox{githubblack}{githubblack}{%
+      \color{white}\textbf{~\faGithub~GitHub~}%
+    }%
+  }%
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % use this to define your address, this may be called more than once.
@@ -545,16 +607,40 @@
   \@ifundefined{@addressone}{\def\@addressone{#1}}{\def\@addresstwo{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% addresses environment: Tabular-based address/contact info display
+%
+% Usage:
+%   \begin{addresses}
+%     \address{Kirkwood.Donavin@Gmail.com}
+%     \address{(801) 554-6834}
+%     \address{\linkedinbtn{url}}
+%     \address{\githubbtn{url}}
+%   \end{addresses}
+%
+\newcounter{addresscount}
+\newcommand{\addressitem}[1]{%
+  \ifnum\theaddresscount=0\else & \fi%
+  #1%
+  \addtocounter{addresscount}{1}%
+}
+
+\newenvironment{addresses}{%
+  \setcounter{addresscount}{0}%
+  \begin{centering}
+    \begin{tabular}{c | c | c | c}%
+      \let\address\addressitem%
+}{%
+    \end{tabular}%
+  \end{centering}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % if you want to print your name and address in a slightly
 % different format than suggested, then this can be used
 % to place it exactly where you want
 %
 \def\opening{\def\@opening{}
   \begingroup
-  \leftskip=-\hoffset	     % I use leftskip to move things to the left as
-  \advance\textwidth\hoffset % changing hoffset doesn't work. But this
-  \hsize=\textwidth	     % doesn't really work as hboxes are rules
-			     % are unaffeted
   \let\par=\@@par
   \parindent=0pt
   \parskip=0pt
@@ -567,12 +653,11 @@
 %
 \newenvironment{resume}{\begingroup
 		       \@ifundefined{@opening}{\opening}{}
+		       \leftskip=\sectionwidth
 }{\endgroup}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % gives you a tabular environment with n equally spaced columns
-% \begin{ncolumn}{#} ... \end{ncolumn}
-%
 % The p option of LaTeX is broken in all but the newest version
 % of latex.tex, this is how to fix it
 %
@@ -818,12 +903,6 @@
 \parindent 0pt
 \parskip \baselineskip
 \setcounter{secnumdepth}{0}
-\def\@listI{\leftmargin\leftmargini
-\topsep 0pt
-\parskip 0pt
-\partopsep 2pt plus 2pt
-\parsep 2pt plus 2pt
-\itemsep \parsep}
 
 \pagestyle{empty}  % don't want page numbers
 

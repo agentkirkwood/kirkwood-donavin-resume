@@ -3,19 +3,16 @@
 	\usepackage{array,ragged2e} %Tabular formating
 	\usepackage[pdfpagemode=FullScreen, colorlinks=true, linkcolor=black,  urlcolor=black]{hyperref} 
 	\usepackage{fancyhdr}
-	\usepackage[margin=1c m]{geometry}
+	\usepackage[margin=2cm]{geometry}
 	% allow hyphenation (was disabled)
 	% \usepackage[none]{hyphenat} %To stop hyphenation
 	\usepackage{enumitem}
 	\usepackage{multicol}
 	\usepackage{printlen} %for printing measurements
 	\usepackage{xcolor}
+	\usepackage{fontawesome5}  %For LinkedIn icon
 
 %Dimensions, Settings & Variables
-	\textwidth=16cm
-	\textheight=26cm
-%	\itemsep=0in	
-	%\parsep=0in
 	\setlength{\columnseprule}{1pt} %For multicols
 	\renewcommand{\familydefault}{\sfdefault}
 	
@@ -36,17 +33,13 @@
 \name{
 	KIRKWOOD P. DONAVIN -- COACH
 }
-% \tagline{Former data scientist -- Passionate about mathematics \& education}
-\address{
-	\begin{centering}
-		\begin{tabular}{c | c | c | c}
-			\href{mailto:kirkwood.donavin@gmail.com}{Kirkwood.Donavin@Gmail.com} &
-			(801) 554-6834 &
-			\bref{https://www.linkedin.com/in/kirkwood-donavin}{LinkedIn Profile} & 
-			\bref{https://www.strava.com/athletes/2005740}{Strava Profile}
-		\end{tabular} 
-	\end{centering}
-}
+\tagline{Enthusiastic about mountain sports \& educating future mountain athletes}
+\begin{addresses}
+	\address{\href{mailto:kirkwood.donavin@gmail.com}{Kirkwood.Donavin@Gmail.com}}
+	\address{+1 (801) 554-6834}
+	\address{\linkedinbtn{https://www.linkedin.com/in/kirkwood-donavin}}
+	\address{\stravabtn{https://www.strava.com/athletes/2005740}}
+\end{addresses}
 
 \begin{resume}
 % tighten itemize spacing
