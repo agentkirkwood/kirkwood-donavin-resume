@@ -198,8 +198,14 @@
 %\DeclareOption{12pt}{\renewcommand\@ptsize{2}}
 
 % Define conditionals before using them
+% Flag for name/address layout: true = line style (name left, address right with horizontal line)
+%                                false = centered style (name and address centered)
 \newif\if@line
+% Flag for section title placement: true = resmargin style (section titles in left margin)
+%                                    false = overlapped style (section titles overlap body text)
 \newif\if@margin
+% Flag to track whether we're inside a position environment (used for conditional list indentation)
+\newif\if@inposition
 
 % Paper size options
 \def\PaperOption{letterpaper}
@@ -475,13 +481,26 @@
 \if@margin\ds@margin\else\ds@overlapped\fi
 
 % After sectionwidth is set, redefine @listI to account for section indentation
+% After sectionwidth is set, redefine @listI to align lists with section margin
+%
+% Lists need different left margins depending on context:
+% - Inside position environments: simple 1.2em indent (position body already indented)
+% - Outside position environments: add sectionwidth + 1.2em (to respect section title margin)
 \def\@listI{\topsep 0pt
 \parskip 0pt
 \partopsep 2pt plus 2pt
 \parsep 2pt plus 2pt
 \itemsep \parsep
-\leftmargin=\sectionwidth
-\advance\leftmargin 1.em}
+\labelwidth=0.8em
+\labelsep=0.4em
+\if@inposition
+  % Inside position: body is already offset, use simple indent
+  \leftmargin=1.2em
+\else
+  % Outside position: must account for section title space in left margin
+  \leftmargin=\sectionwidth
+  \advance\leftmargin 1.2em
+\fi}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -674,7 +693,7 @@
 \def\title#1{\def\@title{\print@title{#1}}\def\@titletext{#1}}
 \def\titlefont{\bfseries} % default title font (bold)
 \newdimen\bodyindent
-\bodyindent=0.5cm
+\bodyindent=1em
 \def\bodyfont{} % default body font (leave unchanged)
 % Define per-field fonts (empty by default, override in document if desired)
 \def\employerfont{}
@@ -849,12 +868,19 @@
      % bad place for a page break
      \penalty -\@secpenalty
      \penalty 10000
-     % no paragraph indent for the job description (leftskip already set by resume environment)
-     \parindent=0pt
-     \ignorespaces
-  }{%
-    % reset leftskip so following content isn't indented
+    % indent job description relative to the header line, like \subtext
+    \parindent=0pt
     \leftskip=0pt
+    % Set flag so lists inside position use simple indentation (not section-aware)
+    \@inpositiontrue
+    \noindent\hspace*{\dimexpr\sectionwidth+\bodyindent\relax}%
+    \begin{minipage}{\dimexpr\textwidth-\sectionwidth-\bodyindent\relax}%
+      \ignorespaces
+  }{%
+    \end{minipage}%
+    % Clear flag so subsequent lists outside position respect section margin
+    \@inpositionfalse
+    \par
     % good place for a page break
     \penalty \@secpenalty
     % (tabular tail is ignored when using single-line headers)
