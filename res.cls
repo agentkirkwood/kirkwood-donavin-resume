@@ -197,6 +197,10 @@
 %\DeclareOption{11pt}{\renewcommand\@ptsize{1}}
 %\DeclareOption{12pt}{\renewcommand\@ptsize{2}}
 
+% Define conditionals before using them
+\newif\if@line
+\newif\if@margin
+
 % Paper size options
 \def\PaperOption{letterpaper}
 \DeclareOption{letter}{\def\PaperOption{letterpaper}}
@@ -208,15 +212,13 @@
 \DeclareOption{resmargin}{\@margintrue}
 \DeclareOption{overlapped}{\@marginfalse}
 
-\newif\if@line
-\newif\if@margin
-
 \ExecuteOptions{overlapped,centered,letter}
 \ProcessOptions\relax
 
 \PassOptionsToClass{\PaperOption,11pt,12pt}{article}
 \LoadClassWithOptions{article}
 \RequirePackage{calc} %For line width calculation
+\RequirePackage{graphicx} %For including images
 
 \nofiles	     % resume's don't need .aux files
 
@@ -227,7 +229,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % prints a centered name with the address centered
-% or the two address on opposite sides of the page
 %
 \def\@printcentername{\begingroup
 	% print the name centered
@@ -238,18 +239,11 @@
 		\vskip 1pt % Small vertical space after name
 		\leavevmode\hbox to \textwidth{\hfil\@tablebox{\taglinefont\@tagline}\hfil}\par
 	}%
-	\@ifundefined{@addressone}{%
+	\@ifundefined{@addresslist}{%
 	% do nothing
 	}{%
-		\@ifundefined{@addresstwo}{
-			% only one address
-			\vskip 2pt
-			\leavevmode\hbox to \textwidth{\hfil\@tablebox{\@addressone}\hfil}\par
-		}{
-			% two addresses
-			\leavevmode\hbox to \textwidth{\hfil\@tablebox{\@addressone}\hfil
-			  \hfil\@tablebox{\@addresstwo}\hfil}\par
-		}%
+		\vskip 2pt
+		\leavevmode\hbox to \textwidth{\hfil\@tablebox{\@addresslist}\hfil}\par
 	}%
 	\vskip 2pt
 \endgroup}
@@ -272,14 +266,10 @@
   \fullline
   \vskip 2pt
   % where do you live?
-  \@ifundefined{@addressone}{%
+  \@ifundefined{@addresslist}{%
     % do nothing
   }{%
-    \leavevmode\hbox to \textwidth
-      {\hfill\vbox{\hbox{\@addressone}
-		   \hbox{\@addresstwo}
-		  }%
-      }\par
+    \leavevmode\hbox to \textwidth{\hfill\@addresslist}\par
   }
 \endgroup}
 
@@ -491,7 +481,7 @@
 \parsep 2pt plus 2pt
 \itemsep \parsep
 \leftmargin=\sectionwidth
-\advance\leftmargin 0.25em}
+\advance\leftmargin 1.em}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -537,11 +527,11 @@
 %
 % These colors are used by the button commands below
 %
-\AtBeginDocument{%
-  \definecolor{linkedinblue}{RGB}{0,119,181}%
-  \definecolor{stravaorange}{RGB}{255,87,34}%
-  \definecolor{githubblack}{RGB}{51,51,51}%
-}
+\RequirePackage{xcolor}
+\definecolor{linkedinblue}{RGB}{0,119,181}
+\definecolor{stravaorange}{RGB}{255,87,34}
+\definecolor{githubblack}{RGB}{51,51,51}
+\definecolor{mountainprojectblue}{RGB}{66,133,244}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % bref: Custom hyperlink command with styled formatting
@@ -598,40 +588,33 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% use this to define your address, this may be called more than once.
+% mountainprojectbtn: Mountain Project button with logo
 %
-\let\@addressone\relax
-\let\@addresstwo\relax
-
-\def\address#1{
-  \@ifundefined{@addressone}{\def\@addressone{#1}}{\def\@addresstwo{#1}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% addresses environment: Tabular-based address/contact info display
+% Usage: \mountainprojectbtn{url}
+% Creates a Mountain Project button with the official logo.
+% Requires the logo file at IMG/mtn-prj-logo-hex2.png
 %
-% Usage:
-%   \begin{addresses}
-%     \address{Kirkwood.Donavin@Gmail.com}
-%     \address{(801) 554-6834}
-%     \address{\linkedinbtn{url}}
-%     \address{\githubbtn{url}}
-%   \end{addresses}
-%
-\newcounter{addresscount}
-\newcommand{\addressitem}[1]{%
-  \ifnum\theaddresscount=0\else & \fi%
-  #1%
-  \addtocounter{addresscount}{1}%
+\definecolor{mountainprojectgrey}{RGB}{60,60,60}
+\newcommand{\mountainprojectbtn}[1]{%
+  \href{#1}{%
+    \fcolorbox{mountainprojectgrey}{mountainprojectgrey}{%
+      \raisebox{-0.15em}{\includegraphics[height=0.9em]{../IMG/mtn-prj-logo-hex2.png}}%
+    }%
+  }%
 }
 
-\newenvironment{addresses}{%
-  \setcounter{addresscount}{0}%
-  \begin{centering}
-    \begin{tabular}{c | c | c | c}%
-      \let\address\addressitem%
-}{%
-    \end{tabular}%
-  \end{centering}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% use this to define your address, this may be called more than once.
+% Supports multiple addresses separated by |
+%
+\let\@addresslist\relax
+
+\def\address#1{%
+  \@ifundefined{@addresslist}{%
+    \def\@addresslist{#1}%
+  }{%
+    \g@addto@macro\@addresslist{ \textbar\ #1}%
+  }%
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -865,8 +848,7 @@
      % bad place for a page break
      \penalty -\@secpenalty
      \penalty 10000
-     % set body indentation and no paragraph indent for the job description
-     \leftskip=\bodyindent
+     % no paragraph indent for the job description (leftskip already set by resume environment)
      \parindent=0pt
      \ignorespaces
   }{%
