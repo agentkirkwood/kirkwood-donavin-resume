@@ -486,7 +486,7 @@
 % Lists need different left margins depending on context:
 % - Inside position environments: simple 1.2em indent (position body already indented)
 % - Outside position environments: add sectionwidth + 1.2em (to respect section title margin)
-\def\@listI{\topsep 0pt
+\def\@listI{\topsep \baselineskip
 \parskip 0pt
 \partopsep 2pt plus 2pt
 \parsep 2pt plus 2pt
@@ -863,25 +863,53 @@
   {%
    \begingroup
      \par
-       % print a single-line header (title -- dates -- employer -- location)
-       \print@singleheader
-     % bad place for a page break
+     % bad place for a page break before position
      \penalty -\@secpenalty
      \penalty 10000
-    % indent job description relative to the header line, like \subtext
     \parindent=0pt
     \leftskip=0pt
     % Set flag so lists inside position use simple indentation (not section-aware)
     \@inpositiontrue
-    \noindent\hspace*{\dimexpr\sectionwidth+\bodyindent\relax}%
-    \begin{minipage}{\dimexpr\textwidth-\sectionwidth-\bodyindent\relax}%
+    % Capture body content in box2 to check if it's empty
+    \setbox2=\vbox\bgroup
+    \hsize=\dimexpr\textwidth-\sectionwidth-\bodyindent\relax
+    \textwidth=\hsize
+    \linewidth=\hsize
       \ignorespaces
   }{%
-    \end{minipage}%
+    \unskip
+    \egroup
+    % Now build the final output based on whether body is empty
+    \ifdim\ht2>0pt
+      % Body has content - build full position with header + indented body
+      \setbox0=\vbox\bgroup
+      \hsize=\dimexpr\textwidth-\sectionwidth\relax
+      \textwidth=\hsize
+      \linewidth=\hsize
+      \print@singleheader
+      \noindent\hspace*{\bodyindent}%
+      \begin{minipage}{\dimexpr\hsize-\bodyindent\relax}%
+        \unvbox2
+      \end{minipage}%
+      \egroup
+      \noindent\hspace*{\sectionwidth}%
+      \box0
+      \par
+    \else
+      % Body is empty - output only header
+      \setbox1=\vbox\bgroup
+      \hsize=\dimexpr\textwidth-\sectionwidth\relax
+      \textwidth=\hsize
+      \linewidth=\hsize
+      \print@singleheader
+      \egroup
+      \noindent\hspace*{\sectionwidth}%
+      \box1
+      \par
+    \fi
     % Clear flag so subsequent lists outside position respect section margin
     \@inpositionfalse
-    \par
-    % good place for a page break
+    % good place for a page break after position
     \penalty \@secpenalty
     % (tabular tail is ignored when using single-line headers)
     \endgroup

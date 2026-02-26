@@ -3,16 +3,15 @@
 	\usepackage{array,ragged2e} %Tabular formating
 	\usepackage[pdfpagemode=FullScreen, colorlinks=true, linkcolor=black,  urlcolor=black]{hyperref} 
 	\usepackage{fancyhdr}
-	\usepackage[margin=2cm]{geometry}
+	\usepackage[margin=1cm]{geometry}
 	\usepackage[none]{hyphenat} %To stop hyphenation
+	\usepackage{enumitem}
 	\usepackage{multicol}
 	\usepackage{printlen} %for printing measurements
 	\usepackage{xcolor}
 	\usepackage{fontawesome5}  %For social media icons
 
 %Dimensions, Settings & Variables
-%	\itemsep=0in	
-	%\parsep=0in
 	\setlength{\columnseprule}{1pt} %For multicols
 	\renewcommand{\familydefault}{\sfdefault}
 	
@@ -53,7 +52,7 @@ models, testing alternate algorithms, and integrating data embeddings to improve
 
 \section{HIGHLIGHTS}
 
-\begin{itemize}
+\begin{itemize}[topsep=0pt]
 	\item \textbf{Expertise}: machine learning, natural language processing (NLP), and statistical analysis
 	\item \textbf{Data Skills}: Querying, cleansing, visualizing, analyzing, predicting, forecasting, testing
 	\item \textbf{Languages}: Python, R, SQL, and Bash
@@ -67,11 +66,10 @@ models, testing alternate algorithms, and integrating data embeddings to improve
 \title{Data Scientist}
 \employer{DEPT Agency}
 \dates{10 mos -- Start: Mar 2024}
-\location{Remote (Salt Lake City, UT)}
+\location{Remote (SLC, UT)}
 \begin{position}
 	Marketing data science for DEPT clients. Specialized in search engine ads, forecasting available ad impressions, and creating an ad-spend budgeting tool using prediction models based on historical data.
 
-    \textbf{Key Accomplishments:}
 	\begin{itemize}
 		\item \textbf{Search Engine Ad Impression Forecasting:} Took over responsibility for a TensorFlow ad impression forecasting LSTM model
 		\item \textbf{Ad-Budget Recommendations:} Built an ad-budget recommendation tool using XGBoost ensemble models that demonstrated our client was overspending on ads by \$100Ks in some ad categories
@@ -83,11 +81,10 @@ models, testing alternate algorithms, and integrating data embeddings to improve
 \title{ML Scientist}
 \employer{Bed Bath \& Beyond}
 \dates{1 yr 5 mos -- Start: Aug 2022}
-\location{Hybrid (Salt Lake City, UT)}
+\location{Hybrid (SLC, UT)}
 \begin{position}
 	Promoted to the ML team supporting sponsored ads as the junior scientist specializing in the application of XGBoost ensemble methods, and text embeddings to produce conversion (i.e., purchase) predictions. Proven track record in optimizing models, including testing XGBoost against a VowPal Wabbit production model, resulting in superior log-loss performance. Implemented text embedding, further elevating predictive accuracy.
 
-	\textbf{Key Accomplishments:}
 	\begin{itemize}
 		\item \textbf{Conversion Prediction:} Tested and produced several XGBoost models for conversion prediction that improved log-loss performance compared with Vowpal Wabbit production model
 		\item \textbf{Textual Embeddings:} Integrated embeddings into conversion prediction models. Built a Sci-Kit Learn TFIDF + Singular Value Decomposition (SVD) embedding class and compared model performance improvements with a fastText model. The latter toolset was demonstrated to be the more performant approach.
@@ -102,12 +99,10 @@ models, testing alternate algorithms, and integrating data embeddings to improve
 \begin{position}
 	\sloppy Supplied analytics and statistical consulting for OSTK's internal search, sponsored products, and recommendations teams \par
 
-	\textbf{Key Accomplishments:}
 	\begin{itemize}
 		\item \textbf{Product Banners}: designed and built the data model that supports Overstock's first data-driven approach to product banner messaging (e.g., "Best Seller", "Top Rated"). In A/B tests against the prior manual system, our banners demonstrated a lift of \$500K in profit annually
 		\item \textbf{Statistical Analysis:} Supplementation of auto-gen. A/B test results with secondary metric $t$-tests, segment breakdowns, and linear models; Statistical consultant for product managers e.g., regarding stat. significance, power, \& sample size
-		\item \textbf{Databases:} Used Presto \& BigQuery SQL every day, comfortable with semi-structured data; Accessed company databases with R \& Python's \texttt{sqlalchemy} for incorporation into advanced analytics (e.g., statistical power, \& financial estimation), SQL scripts tracked with Git, and I administered a BitBucket repository for these scripts for my analytics team
-		\item \textbf{Dashboarding:} Giving non-data colleagues the power to make data-driven decisions; Used LookML or MicroStrategy to build dozens of reports for managers to defend their products and strategize enhancements; tracked various KPIs such as conversion, CTR, friction metrics - exit rate, \& scroll depth
+		\item \textbf{Analytics Infrastructure:} Leveraged SQL fluency across multiple database implementations (Presto, BigQuery, Python/sqlalchemy) and reporting platforms (LookML, MicroStrategy) to deliver decision-support dashboards tracking conversion, CTR, and friction metrics; managed my team's git repo of SQL scripts
 	\end{itemize}
 \end{position}
 
@@ -118,10 +113,9 @@ models, testing alternate algorithms, and integrating data embeddings to improve
 \begin{position}
 	Was promoted to the level-2 role in order to focus on statistical analyses and report writing to answer larger BI questions
 
-	\textbf{Key Accomplishments:}
 	\begin{itemize}
 		\item \textbf{Data Modeling \& Dash-boarding:} Modeled tables, pulled datasets using Presto SQL, AWS Athena, and Snowflake SQL, built Domo reports for various Womply business units
-		\item \textbf{Statistical Analysis:} Statistical  \& graphical analyses using RMarkdown; contributor in large study \textit{How online reviews impact small business revenue}. The results demonstrated that Google ratings are positively correlated to revenue, while Yelp ratings are not. \\
+		\item \textbf{Statistical Analysis:} Statistical  \& graphical analyses using RMarkdown; contributor in large study \textit{How online reviews impact small business revenue}. The results demonstrated that Google ratings are positively correlated to revenue, while Yelp ratings are not.
 		\item \textbf{Python Programming:} Managed Python scripts running ETL processes for the Analytics team and the Finance team
 	\end{itemize}
 \end{position}
@@ -145,7 +139,6 @@ models, testing alternate algorithms, and integrating data embeddings to improve
 \begin{position}
 Principally involved with TechLink's economic impact studies regarding technology transfer and Small Business Innovation Research (SBIR) contract agreements between the Department of Defense and private industry
 
-	\textbf{Key Accomplishments:}
 	\begin{itemize}
 		\item \textbf{Data Wrangling:} Cleaned records with R, queried records from a Django database from 25,000 company survey records of DoD contractors and grant award winners
 		\item \textbf{Statistical Consultant \& Editor:} For 3 of TechLink’s economic impact studies of DoD Small Business Innovation Research (SBIR) programs and licensing activity, the DoD used this research to defend program funding in front of the U.S. Congress
@@ -157,16 +150,28 @@ Principally involved with TechLink's economic impact studies regarding technolog
 
 \section{EDUCATION}
 
-\textbf{Data Science Immersive Certificate -- Dec 2017 -- Galvanize, Inc. -- Boulder, CO}
+\title{Data Science Immersive Certificate}
+\employer{Galvanize, Inc.}
+\dates{Dec 2017}
+\location{Boulder, CO}
+\begin{position}
+\end{position}
 
-\textbf{M.S. of Applied Economics -- May 2015 -- Montana State University --  Bozeman, MT}
-
-\subtext{
+\title{M.S. of Applied Economics}
+\employer{Montana State University}
+\dates{May 2015}
+\location{Bozeman, MT}
+\begin{position}
 	\textbf{Thesis}: 
 	\bref{https://www.slideshare.net/slideshow/embed\_code/key/K6qYsOYvj9u5Ab}{The Welfare Impacts of Engineers Without Borders in Western Kenya}
-}
+\end{position}
 
-\textbf{B.A of International Relations -- May 2011 -- Cornell College -- Mount Vernon, IA}
+\title{B.A of International Relations}
+\employer{Cornell College}
+\dates{May 2011}
+\location{Mount Vernon, IA}
+\begin{position}
+\end{position}
 
 \end{resume}
 \end{document}
