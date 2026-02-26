@@ -498,6 +498,7 @@
 \newlength{\linelength}
 
 \def\fullline{
+  \vspace{0.35cm}
   \nointerlineskip
   \vbox{\hrule width\textwidth}
   \nointerlineskip
