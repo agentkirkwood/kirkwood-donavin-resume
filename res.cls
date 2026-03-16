@@ -62,6 +62,10 @@
 %
 %   \name{text} defines your name
 %
+%   \targetPosition{text}
+%               defines an optional target role shown as
+%               "name -- target role" in the header
+%
 %   \address{text}
 %		defines your address
 %		this can be called twice if you have two addresses
@@ -237,8 +241,8 @@
 % prints a centered name with the address centered
 %
 \def\@printcentername{\begingroup
-	% print the name centered
-	\leavevmode\hbox to \textwidth{\hfil\@tablebox{\namefont\@name}\hfil}\par
+  % print the name centered
+  \leavevmode\hbox to \textwidth{\hfil\@tablebox{\namefont\@formattedname}\hfil}\par
 	\@ifundefined{@tagline}{%
 	% do nothing
 	}{%
@@ -262,7 +266,7 @@
 \def\taglinefont{\normalsize} % Define the font for the tagline
 \def\@linename{\begingroup
   \def\\{, }
-  {\namefont\@name}
+  {\namefont\@formattedname}
   \@ifundefined{@tagline}{%
   % do nothing
   }{%
@@ -534,6 +538,32 @@
 \def\name#1{\def\@name{#1}}
 
 \def\@name{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% use this to define your target position (optional)
+%
+% This mirrors the common manual pattern:
+%   \name{Your Name -- Target Position}
+% by letting users write:
+%   \name{Your Name}
+%   \targetPosition{Target Position}
+%
+\def\targetPosition#1{\def\@targetPosition{#1}}
+
+\def\@targetPosition{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% internal helper to build the displayed name line
+%
+% If \@targetPosition is non-empty, append " -- <target position>".
+%
+\def\@formattedname{%
+  \@name%
+  \ifx\@targetPosition\@empty
+  \else
+    \space-- \@targetPosition%
+  \fi
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % use this to define your tagline
