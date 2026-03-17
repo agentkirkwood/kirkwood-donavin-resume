@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{sourcesanspro}
+\usepackage{FiraSans}
+\usepackage{roboto}
+\usepackage{cabin}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.65em}
+
+\newcommand{\SampleNormalText}{Kirkwood P. Donavin -- Bike Mechanic}
+\newcommand{\SampleBodyText}{Experienced mechanic focused on clear communication, repair quality, and efficient turnaround.}
+\newcommand{\SampleSectionText}{Experience}
+\newcommand{\SampleCapsText}{KIRKWOOD P. DONAVIN -- BIKE MECHANIC}
+
+\newcommand{\FontBlock}[3]{%
+  \begingroup
+  #2
+  {\Large\bfseries #1}\par
+  \endgroup
+  \begingroup
+  #3
+  {Bold caps: \bfseries \SampleCapsText\par}
+  {Small caps: \scshape\MakeLowercase{\SampleNormalText}\par}
+  {Section-style: \bfseries\scshape\MakeLowercase{\SampleSectionText}\par}
+  Body text: \SampleBodyText\par
+  \endgroup
+  \vspace{0.85em}
+  \textcolor{gray}{\rule{\linewidth}{0.4pt}}\par
+}
+
+\begin{document}
+
+{\LARGE\bfseries Sans Serif Font Comparison}\par
+This reference sheet shows examples of sans-serif fonts that have usable small-caps functionality in this LaTeX setup.\par
+Each font title is rendered in its own font, and each sample compares normal text, regular caps, and small caps.\par
+
+\vspace{0.6em}
+{\large\bfseries How To Use In Resume Files}\par
+Your resume class defaults to Cabin. To override font in an individual resume, add one of the following lines in that resume preamble (after \verb|\documentclass|, before \verb|\begin{document}|):\par
+\verb|\resumesetfont[sfdefault]{cabin}|\par
+\verb|\resumesetfont[sfdefault]{roboto}|\par
+\verb|\resumesetfont[sfdefault]{sourcesanspro}|\par
+
+\vspace{0.8em}
+
+\FontBlock{Source Sans Pro}{\fontfamily{SourceSansPro-LF}\selectfont}{\fontfamily{SourceSansPro-LF}\selectfont}
+\FontBlock{Roboto}{\roboto}{\roboto}
+\FontBlock{Cabin}{\cabin}{\cabin}
+
+\end{document}

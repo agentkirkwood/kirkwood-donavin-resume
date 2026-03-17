@@ -78,6 +78,9 @@
 %
 %   \tagline{text} defines a tagline to appear under the name and before addresses.
 %
+%   \bsc{text}
+%               body-text emphasis helper: bold small caps
+%
 %   \opening	this prints your name and address at that spot
 %		this is not normally needed, as \begin{resume}
 %		does this but is provided just in case you need
@@ -227,6 +230,20 @@
 
 \PassOptionsToClass{\PaperOption,11pt,12pt}{article}
 \LoadClassWithOptions{article}
+% Use T1 encoding for robust small-caps behavior with Type1/OpenType wrappers.
+\RequirePackage[T1]{fontenc}
+%
+% Font policy:
+% - Cabin is the class default sans-serif family.
+% - Individual resumes can override by calling:
+%     \resumesetfont[sfdefault]{roboto}
+%   in their preamble (after \documentclass, before \begin{document}).
+%
+\newcommand{\resumesetfont}[2][]{%
+  \RequirePackage[#1]{#2}%
+  \renewcommand{\familydefault}{\sfdefault}%
+}
+\resumesetfont[sfdefault]{cabin}
 \RequirePackage{calc} %For line width calculation
 \RequirePackage{graphicx} %For including images
 
@@ -242,7 +259,7 @@
 %
 \def\@printcentername{\begingroup
   % print the name centered
-  \leavevmode\hbox to \textwidth{\hfil\@tablebox{\namefont\@formattedname}\hfil}\par
+  \leavevmode\hbox to \textwidth{\hfil\@tablebox{\namefont\MakeUppercase{\@formattedname}}\hfil}\par
 	\@ifundefined{@tagline}{%
 	% do nothing
 	}{%
@@ -262,11 +279,12 @@
 % this is used to print the name and address at the top of
 % the page with a hline in between
 %
-\def\namefont{\large\bf}
+% Name/targetPosition header style: larger, title-like bold caps.
+\def\namefont{\LARGE\bfseries}
 \def\taglinefont{\normalsize} % Define the font for the tagline
 \def\@linename{\begingroup
   \def\\{, }
-  {\namefont\@formattedname}
+  {\namefont\MakeUppercase{\@formattedname}}
   \@ifundefined{@tagline}{%
   % do nothing
   }{%
@@ -305,7 +323,8 @@
 % unless you really understand all of this but it is not
 % hard.  Either way, it can only be executed once
 %
-\def\sectionfont{\bf}
+% Section heading style: regular-size bold caps.
+\def\sectionfont{\normalsize\bfseries}
 \newdimen\sectionwidth
 \newskip\sectionskip
 \newdimen\resumewidth
@@ -382,7 +401,7 @@
   % will be ignored but \hoffset's are not.  The result is that the box will
   % only by \hoffset. This is what I want
   \hbox to 0pt{%
-    \hbox to \sectionwidth{\sectionfont#1\hss}%
+    \hbox to \sectionwidth{\sectionfont\MakeUppercase{#1}\hss}%
     \hss%
   }%
   \addpenalty{-\@secpenalty} % this would be a bad place for a page break
@@ -442,7 +461,7 @@
   \def\\{ }
   \addpenalty{\@secpenalty}
   \addvspace{\sectionskip}
-  \hbox to 0pt{\hss\hbox to \sectionwidth{\sectionfont#1\hss}}
+  \hbox to 0pt{\hss\hbox to \sectionwidth{\sectionfont\MakeUppercase{#1}\hss}}
   \addpenalty{-\@secpenalty} % this would be a bad place for a page break
   \endgroup
   \ifx\\\@tabcr   % see boxed@sectiontitle for explation
@@ -571,6 +590,15 @@
 \def\tagline#1{\def\@tagline{#1}}
 
 \def\@tagline{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% bsc: Body emphasis helper (bold small caps)
+%
+% Usage: \bsc{label text}
+% Applies lowercase conversion so true small-caps glyphs are used
+% even when source text is uppercase.
+%
+\newcommand{\bsc}[1]{{\bfseries\scshape\MakeLowercase{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Color definitions for social media buttons
@@ -721,14 +749,11 @@
 \def\dates#1{\def\@dates{\print@dates{#1}}\def\@datestext{#1}}
 % Define fonts and body indent for position formatting
 \def\title#1{\def\@title{\print@title{#1}}\def\@titletext{#1}}
-\def\titlefont{\bfseries} % default title font (bold)
+% Position header typography hook (applies to title/employer/location/dates).
+\def\positionfont{}
 \newdimen\bodyindent
 \bodyindent=1em
 \def\bodyfont{} % default body font (leave unchanged)
-% Define per-field fonts (empty by default, override in document if desired)
-\def\employerfont{}
-\def\datesfont{}
-\def\locationfont{}
 
 % Print a single-line position header with fields joined by em-dashes
 % Order: title -- dates -- employer -- location
@@ -740,14 +765,20 @@
     \def\maybe@print##1{%
       \@ifundefined{@##1text}{% not defined -> nothing
       }{%
-        \ifx\relax\first@fld\relax
-          \def\first@fld{1}% first printed field, no separator
+        % Skip defined-but-empty fields so separators are only printed
+        % between fields that actually contain text.
+        \edef\field@text{\csname @##1text\endcsname}%
+        \ifx\field@text\@empty
+          % empty -> nothing
         \else
-          \nobreak\nobreak\ \textemdash\ \nobreak%
+          \ifx\relax\first@fld\relax
+            \def\first@fld{1}% first printed field, no separator
+          \else
+            \nobreak\nobreak\ \textemdash\ \nobreak%
+          \fi
+          % Apply shared position header font and force uppercase.
+          {\positionfont\MakeUppercase{\csname @##1text\endcsname}}%
         \fi
-        % Use the per-field font only for content, but since header is bolded
-        % by \bfseries above we keep the field font small (applied inside group)
-        {\csname ##1font\endcsname \csname @##1text\endcsname}%
       }%
     }%
     % print in desired order: title, employer, location, dates (dates last)
