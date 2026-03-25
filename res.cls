@@ -260,18 +260,18 @@
 \def\@printcentername{\begingroup
   % print the name centered
   \leavevmode\hbox to \textwidth{\hfil\@tablebox{\namefont\MakeUppercase{\@formattedname}}\hfil}\par
-	\@ifundefined{@tagline}{%
-	% do nothing
-	}{%
-		\vskip 1pt % Small vertical space after name
-		\leavevmode\hbox to \textwidth{\hfil\@tablebox{\taglinefont\@tagline}\hfil}\par
-	}%
 	\@ifundefined{@addresslist}{%
 	% do nothing
 	}{%
 		\vskip 2pt
 		\leavevmode\hbox to \textwidth{\hfil\@tablebox{\@addresslist}\hfil}\par
 	}%
+  \@ifundefined{@tagline}{%
+  % do nothing
+  }{%
+    \vskip 2pt
+    \leavevmode\hbox to \textwidth{\hfil\@tablebox{\taglinefont\@tagline}\hfil}\par
+  }%
 	\vskip 2pt
 \endgroup}
 
@@ -281,15 +281,10 @@
 %
 % Name/targetPosition header style: larger, title-like bold caps.
 \def\namefont{\LARGE\bfseries}
-\def\taglinefont{\normalsize} % Define the font for the tagline
+\def\taglinefont{\normalsize\itshape} % Define the font for the tagline
 \def\@linename{\begingroup
   \def\\{, }
   {\namefont\MakeUppercase{\@formattedname}}
-  \@ifundefined{@tagline}{%
-  % do nothing
-  }{%
-    \par\noindent{\taglinefont\@tagline} % New line for tagline
-  }%
   \vskip 2pt
   \fullline
   \vskip 2pt
@@ -299,6 +294,12 @@
   }{%
     \leavevmode\hbox to \textwidth{\hfill\@addresslist}\par
   }
+  \@ifundefined{@tagline}{%
+  % do nothing
+  }{%
+    \vskip 2pt
+    \par\noindent{\taglinefont\@tagline}
+  }%
 \endgroup}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
