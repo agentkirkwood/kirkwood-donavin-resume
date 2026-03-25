@@ -335,7 +335,9 @@
   \resumewidth=\textwidth
   \setlength{\linelength}{\textwidth+3cm}%
 }
-\sectionskip=3.5ex plus 1ex minus -.2ex % values stolen from LaTeX
+% Keep section headings visually close to surrounding flow while
+% preserving enough clearance from \fullline to avoid overlap.
+\sectionskip=1.2ex plus .3ex minus .1ex
 
 \def\newsectionwidth#1{%
 		     \sectionwidth=#1
@@ -518,6 +520,9 @@
 \labelsep=0.4em
 \if@inposition
   % Inside position: body is already offset, use simple indent
+  % and avoid adding an extra blank line before/after lists.
+  \topsep=0pt
+  \partopsep=0pt
   \leftmargin=1.2em
 \else
   % Outside position: must account for section title space in left margin
@@ -943,7 +948,7 @@
     % Now build the final output based on whether body is empty
     \ifdim\ht2>0pt
       % Body has content - build full position with header + indented body
-      \setbox0=\vbox\bgroup
+      \setbox0=\vtop\bgroup
       \hsize=\dimexpr\textwidth-\sectionwidth\relax
       \textwidth=\hsize
       \linewidth=\hsize
@@ -958,7 +963,7 @@
       \par
     \else
       % Body is empty - output only header
-      \setbox1=\vbox\bgroup
+      \setbox1=\vtop\bgroup
       \hsize=\dimexpr\textwidth-\sectionwidth\relax
       \textwidth=\hsize
       \linewidth=\hsize
