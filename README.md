@@ -1,13 +1,25 @@
 # Professional LaTeX Resume Template
 
-This repository provides a highly customizable LaTeX resume template based on the `res.cls` document class, along with an example resume (`kirkwood-donavin-resume.tex`) demonstrating its usage.
+This repository provides a highly customizable LaTeX resume template based on the `res.cls` document class, along with an example resume (`Resume for Kirkwood Donavin - Data Scientist.tex`) demonstrating its usage.
 
 If you appreciate a clean, well-structured, and easily adaptable resume format, this template might be a great starting point for you\!
 
 ## Files in this Repository
 
   * `res.cls`: The custom LaTeX document class file that defines the styling and commands for the resume.
-  * `kirkwood-donavin-resume.tex`: An example resume showcasing how to use the `res.cls` file, complete with various sections like Summary, Highlights, Experience, and Education. This document also includes custom commands for formatting, such as `\tagline`, which places a short descriptive phrase under the name.
+  * `Resume for Kirkwood Donavin - Data Scientist.tex`: An example resume showcasing how to use the `res.cls` file, complete with various sections like Summary, Highlights, Experience, and Education. This document also includes custom commands for formatting, such as `\tagline`, which places a short descriptive phrase under the name.
+
+## ALT Role-Specific Resumes
+
+The `ALT/` directory contains role-targeted resume variants that use the same `res.cls` template but adjust content for specific job types.
+
+  * Naming pattern: `Resume for Kirkwood Donavin - <Role>.tex`
+  * Use these examples when tailoring your resume for a specific position.
+  * Compile any ALT version with:
+
+```bash
+pdflatex "ALT/Resume for Kirkwood Donavin - <Role>.tex"
+```
 
 ## Features of the `res.cls` Style
 
@@ -34,15 +46,15 @@ The `res.cls` style offers several features to help you craft a professional res
     git clone https://github.com/YourUsername/your-repo-name.git
     cd your-repo-name
     ```
-2.  **Edit `kirkwood-donavin-resume.tex`:**
-      * Open `kirkwood-donavin-resume.tex` in your favorite LaTeX editor.
+2.  **Edit `Resume for Kirkwood Donavin - Data Scientist.tex`:**
+  * Open `Resume for Kirkwood Donavin - Data Scientist.tex` in your favorite LaTeX editor.
       * Replace the placeholder information with your own details.
       * Make use of the provided commands like `\name{}`, `\tagline{}`, `\address{}`, `\section{}`, and the `position` environment.
       * Experiment with the document class options (e.g., `centered`, `line`, `resmargin`, `overlapped`, `11pt`, `12pt`) by modifying `\documentclass[]` at the top of the `.tex` file.
 3.  **Compile with LaTeX:**
     Use a LaTeX compiler (like `pdflatex`) to compile the `.tex` file:
     ```bash
-    pdflatex "kirkwood-donavin-resume.tex"
+    pdflatex "Resume for Kirkwood Donavin - Data Scientist.tex"
     ```
     This will generate a PDF of your resume.
 
