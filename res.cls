@@ -78,8 +78,12 @@
 %
 %   \tagline{text} defines a tagline to appear under the name and before addresses.
 %
-%   \bsc{text}
+%   \boldSmallCaps{text}
 %               body-text emphasis helper: bold small caps
+
+%   \boldCaps{text}
+%               body-text emphasis helper: bold uppercase
+%               (matches section and position header capitalization)
 %
 %   \opening	this prints your name and address at that spot
 %		this is not normally needed, as \begin{resume}
@@ -598,13 +602,22 @@
 \def\@tagline{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% bsc: Body emphasis helper (bold small caps)
+% boldSmallCaps: Body emphasis helper (bold small caps)
 %
-% Usage: \bsc{label text}
+% Usage: \boldSmallCaps{label text}
 % Applies lowercase conversion so true small-caps glyphs are used
 % even when source text is uppercase.
 %
-\newcommand{\bsc}[1]{{\bfseries\scshape\MakeLowercase{#1}}}
+\newcommand{\boldSmallCaps}[1]{{\bfseries\scshape\MakeLowercase{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% boldCaps: Body emphasis helper (bold uppercase)
+%
+% Usage: \boldCaps{label text}
+% Mirrors the capitalization treatment used in section titles
+% and position headers.
+%
+\newcommand{\boldCaps}[1]{{\bfseries\MakeUppercase{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Color definitions for social media buttons
