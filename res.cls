@@ -602,7 +602,7 @@
 \def\@tagline{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% boldSmallCaps: Body emphasis helper (bold small caps)
+% boldSmallCaps: Body emphasis helper
 %
 % Usage: \boldSmallCaps{label text}
 % Applies lowercase conversion so true small-caps glyphs are used
